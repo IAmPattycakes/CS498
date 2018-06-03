@@ -1,7 +1,12 @@
+/* These two functions were tested using the linux time command, 
+using "time a.out" The results for slow search were 3.085 on average
+and 3.060 for normal binary search using these methods. */
+
 #include <stdio.h>
 
 #define SEARCHSIZE 1000000
-#define LOOPS 1
+#define LOOPS 20
+
 int binsearch(int x, int v[], int n);
 int slowbinsearch(int x, int v[], int n);
 
@@ -16,7 +21,7 @@ int main()
 	}
 	for(int j = 0; j <= LOOPS; j++) {
 		for(int i = 0; i < SEARCHSIZE; i++)	{
-			printf("%d\n", slowbinsearch(i, searchArray, SEARCHSIZE));
+			binsearch(i, searchArray, SEARCHSIZE);
 		}
 	}
 }
@@ -49,5 +54,6 @@ int slowbinsearch(int x, int v[], int n)
 		//printf("%d\t%d\t%d\n", low, mid, high);
 	}
 	if(low == x) return low;
+	if(high == x) return high;
 	return -1; //No match
 }
