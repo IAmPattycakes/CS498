@@ -1,3 +1,9 @@
 #include <stdio.h>
 
-s
+#define TABSIZE 5
+
+int main() 
+{
+	int lineSpace;
+	char *tabIn;
+)
