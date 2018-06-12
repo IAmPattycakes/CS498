@@ -51,6 +51,19 @@ int main()
 				push(pop() - op2);
 			break;
 
+			case '1':
+				push(sin(pop()));
+			break;
+
+			case '2':
+				push(exp(pop()));
+			break;
+
+			case '3':
+				op2 = pop();
+				push(pow(pop(), op2));
+			break;
+
 			case '/':
 				op2 = pop();
 				if(op2 != 0.0f) {
@@ -87,7 +100,51 @@ int getop(char s[]) {
 	while((s[0] = c = getch()) == ' ' || c == '\t');
 	s[1] = '\0';
 	if(!isdigit(c) && c != '.') //Not a number
-		return c;
+		if(c == '%' || c == '+' || c == '-' || c == '/' || c == '*') {
+			return c;
+		} else { //Letters and extended functions
+			if(c == 's') {
+				int t1;
+				if((t1 = getchar()) == 'i') {
+					int t2;
+					if((t1 = getch()) == 'n') {
+						return '1';
+					} else {
+						ungetch(t1);
+						ungetch(t2);
+					}
+				} else {
+					ungetch(t1);
+				}
+			} else if( c == 'e') {
+				int t1;
+				if((t1 = getchar()) == 'x') {
+					int t2;
+					if((t1 = getch()) == 'p') {
+						return '2';
+					} else {
+						ungetch(t1);
+						ungetch(t2);
+					}
+				} else {
+					ungetch(t1);
+				}
+			} else if( c == 'p') {
+				int t1;
+				if((t1 = getchar()) == 'o') {
+					int t2;
+					if((t1 = getch()) == 'w') {
+						return '3';
+					} else {
+						ungetch(t1);
+						ungetch(t2);
+					}
+				} else {
+					ungetch(t1);
+				}
+			} 
+			return c;
+		}
 	i = 0;
 	if(isdigit(c)) //Collects integer part
 		while(isdigit(s[++i] = c = getch()));
