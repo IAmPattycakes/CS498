@@ -1,3 +1,6 @@
+/*This is assuming that you only get one character pushed back - I don't see any real reason
+for this other than saving 400 bytes of memory. I guess it could be necessary. */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,7 +11,7 @@
 #define MAXOP MAX
 #define NUMBER '0'
 #define MAXVAL MAX
-#define BUFSIZE MAX
+#define BUFSIZE 1
 #define NAME 'N' //SIgnal that name/identifier/string operation was found
 
 int getop(char []);

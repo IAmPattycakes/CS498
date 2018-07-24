@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <math.h>
 #include <float.h>
 
@@ -8,6 +9,7 @@
 #define NUMBER '0'
 #define MAXVAL MAX
 #define BUFSIZE MAX
+#define NAME 'N' //SIgnal that name/identifier/string operation was found
 
 int getop(char []);
 void push(double);
@@ -17,6 +19,8 @@ void ungetch(int);
 double peek();
 void swap();
 void duplicate();
+
+double variables[26];
 
 //Variables for pushing
 int sp = 0;
@@ -29,41 +33,29 @@ int bufp = 0;
 int main()
 {
 	int type;
-	double op2;
+	double op2, ans;
 	char s[MAXOP];
+	int lastvar;
 
 	while((type = getop(s)) != EOF) {
 		switch(type) {
 			case NUMBER:
 				push(atof(s));
 			break;
-
+			
 			case '+':
 				push(pop() + pop());
 			break;
-
+			
 			case '*':
 				push(pop() * pop());
 			break;
-
+			
 			case '-':
 				op2 = pop();
 				push(pop() - op2);
 			break;
-
-			case '1':
-				push(sin(pop()));
-			break;
-
-			case '2':
-				push(exp(pop()));
-			break;
-
-			case '3':
-				op2 = pop();
-				push(pow(pop(), op2));
-			break;
-
+			
 			case '/':
 				op2 = pop();
 				if(op2 != 0.0f) {
@@ -73,7 +65,7 @@ int main()
 					printf("error: zero divisor\n");
 				}
 			break;
-
+			
 			case '%':
 				op2 = pop();
 				if(op2 != 0.0f)
@@ -81,13 +73,49 @@ int main()
 				else
 					printf("error: cannot modulo by 0\n");
 			break;
-
-			case '\n':
-				printf("\t%lf\n", pop());
+			
+			case '=':
+				pop(); //Throw away the previous variable value
+				variables[lastvar - 'a'] = pop();
 			break;
-
+			
+			case '_':
+				push(ans);
+			break;
+			
+			case NAME:
+				if(strcmp(s, "sin") == 0) {
+					push(sin(pop()));
+				} else if(strcmp(s, "cos") == 0) {
+					push(cos(pop()));
+				} else if(strcmp(s, "tan") == 0) {
+					push(tan(pop()));
+				} else if(strcmp(s, "pow") == 0) {
+					op2 = pop();
+					push(pow(pop(), op2));
+				} else if(strcmp(s, "exp") == 0) {
+					push(exp(pop()));
+				} else if(strcmp(s, "peek") == 0) {
+					push(exp(pop()));
+				} else if(strcmp(s, "swap") == 0) {
+					push(exp(pop()));
+				} else if(strcmp(s, "dup") == 0) { //shortened for "duplicate"
+					push(exp(pop()));
+				} else printf("error: unknown command %s\n", s);
+			break;
+			
+			case '\n':
+			ans = pop();
+				printf("\t%lf\n", ans);
+			break;
+			
 			default:
-				printf("error: unknown command %s\n", s);
+				if(type >= 'a' && type <= 'z') {
+					push(variables[type - 'a']);
+					lastvar = type;
+				} else {
+					printf("error: unknown command %s\n", s);
+				}
 			break;
 		}
 	}
@@ -95,58 +123,36 @@ int main()
 }
 
 int getop(char s[]) {
-	int i, c;
+	int i, c, c2;
 
 	while((s[0] = c = getch()) == ' ' || c == '\t');
 	s[1] = '\0';
-	if(!isdigit(c) && c != '.') //Not a number
-		if(c == '%' || c == '+' || c == '-' || c == '/' || c == '*') {
-			return c;
-		} else { //Letters and extended functions
-			if(c == 's') {
-				int t1;
-				if((t1 = getchar()) == 'i') {
-					int t2;
-					if((t1 = getch()) == 'n') {
-						return '1';
-					} else {
-						ungetch(t1);
-						ungetch(t2);
-					}
-				} else {
-					ungetch(t1);
-				}
-			} else if( c == 'e') {
-				int t1;
-				if((t1 = getchar()) == 'x') {
-					int t2;
-					if((t1 = getch()) == 'p') {
-						return '2';
-					} else {
-						ungetch(t1);
-						ungetch(t2);
-					}
-				} else {
-					ungetch(t1);
-				}
-			} else if( c == 'p') {
-				int t1;
-				if((t1 = getchar()) == 'o') {
-					int t2;
-					if((t1 = getch()) == 'w') {
-						return '3';
-					} else {
-						ungetch(t1);
-						ungetch(t2);
-					}
-				} else {
-					ungetch(t1);
-				}
-			} 
-			return c;
-		}
 	i = 0;
-	if(isdigit(c)) //Collects integer part
+	if(islower(c)) {
+		while(islower(s[++i] = c = getch())); //Keep filling up s with all the lowercase letters
+		s[i] = '\0';
+		if(c != EOF) {
+			ungetch(c);
+		}
+		if(strlen(s) > 1) {
+			return NAME;
+		} else { //Only read one character, variable.
+			return s[i - 1];
+		}
+	}
+	
+	if(!isdigit(c) && c != '.' && c != '-') //Not a number
+		return c;
+	if(c == '-') {
+		c2 = getch();
+		if(isdigit(c2) || c2 == '.') {
+			ungetch(c2);
+		} else {
+			if(c2 != EOF) ungetch(c2);
+			return '-';
+		}
+	}
+	if(isdigit(c) || c == '-') //Collects integer part
 		while(isdigit(s[++i] = c = getch()));
 	if(c == '.') //Collects fraction part
 		while(isdigit(s[++i] = c = getch()));

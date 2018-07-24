@@ -82,14 +82,23 @@ int main()
 }
 
 int getop(char s[]) {
-	int i, c;
+	int i, c, c2;
 
 	while((s[0] = c = getch()) == ' ' || c == '\t');
 	s[1] = '\0';
-	if(!isdigit(c) && c != '.') //Not a number
+	if(!isdigit(c) && c != '.' && c != '-') //Not a number
 		return c;
 	i = 0;
-	if(isdigit(c)) //Collects integer part
+	if(c == '-') {
+		c2 = getch();
+		if(isdigit(c2) || c2 == '.') {
+			ungetch(c2);
+		} else {
+			if(c2 != EOF) ungetch(c2);
+			return '-';
+		}
+	}
+	if(isdigit(c) || c == '-') //Collects integer part
 		while(isdigit(s[++i] = c = getch()));
 	if(c == '.') //Collects fraction part
 		while(isdigit(s[++i] = c = getch()));

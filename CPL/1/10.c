@@ -15,8 +15,12 @@ main()
       if(c == '\b') printf("\\b"); //I couldn't figure out how to give it a backspace
       else
       {
-        if(c == '\\') printf("\\");
-        else putchar(c);
+        if(c == '\\') printf("\\\\");
+        else
+        {
+          if(c == '\n') printf("\\n");
+          else putchar(c);
+        }
       }
     }
   }

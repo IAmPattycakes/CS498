@@ -1,0 +1,2 @@
+What does it actually want? Should it omit anything in a string? Should it count the number of strings? Omit all comments from the count? should it count what it would see after the preprocessor?
+ 

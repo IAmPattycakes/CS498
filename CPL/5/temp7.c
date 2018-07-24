@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#undef getline
-
 #define MAXLINES 5000
 #define MAXLEN 1000
 

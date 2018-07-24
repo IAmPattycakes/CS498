@@ -9,7 +9,7 @@
 #define NUMBER '0'
 #define MAXVAL MAX
 #define BUFSIZE MAX
-#define NAME 'N' //SIgnal that name/identifier/string operation was found
+#define NAME 'N' //Signal that name/identifier/string operation was found
 
 int getop(char []);
 void push(double);
@@ -209,8 +209,6 @@ void duplicate() {
 	push(op1);
 }
 
-/* I see no issue with ungets only using ungetch, as all a string is in C is just an array of characters. 
-I would either be manipulating buf/bufp the exact same way in a loop, or just calling ungetch.*/
 void ungets(char s[]) {
 	int i;
 	

@@ -4,7 +4,8 @@ int setbits(int x, int p, int n, int y);
 
 int main()
 {
-    printf("%d\n", setbits(0xFF, 2, 4, 0x00));
+    printf("%d == %d\n", setbits(0xFF, 2, 4, 0x00), 0xC3); // 1100 0011
+    printf("%d == %d\n", setbits(0xDF, 1, 3, 0x04), 0xCF); // 1100 1111
     printf("%d\n", setbits(0xF00F, 4, 8, 0x0FF0));
 }
 

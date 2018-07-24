@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#define swap(t, x, y) ({t a = (x); (x = (y));printf("%d\n", x); (y = (a));})
+#define swap(t, x, y) t TEMP = (x); x = (y); y = TEMP
 
 int main()
 {

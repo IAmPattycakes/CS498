@@ -55,9 +55,14 @@ void reverse(char s[])
   low = 0;
   while(s[high] != '\0') ++high;
   --high;
-  while(s[low++] != '\0') (reversal[--high] = s[low]);
+  while(s[low] != '\0') {
+    reversal[high] = s[low];
+    low++;
+    high--;
+  }
+  reversal[low] = '\0';
 
   for(int i = 0; i < 200; i++) {
-  	s[i] = reversal[i];\
+  	s[i] = reversal[i];
   }
 }

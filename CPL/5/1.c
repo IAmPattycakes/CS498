@@ -13,9 +13,34 @@ int sp = 0;
 
 int main()
 {
-    
+    int a = 123;
+    int* ptr = &a;
+    //char num[] = "-1234";
+    printf("%d\n", getint(ptr));
 }
 
+int getint(int *pn)
+{
+    int c, sign;
+    while(isspace(c = getch())); //skips whitespace
+    
+    if(isdigit(c) && c != EOF && c != '+' && c != '-') {
+        ungetch(c);
+        return 0;
+    }
+    sign = (c == '-') ? -1 : 1;
+    if(c == '+' || c == '-')
+        c = getch();
+    for(*pn = 0; isdigit(c); c = getch())
+        *pn = 10 * *pn + (c - '0');
+    *pn *= sign;
+    if(c != EOF) {
+        ungetch(c);
+    }
+    return c;
+    
+}
+/*
 int getint(int *pn)
 {
     int c, sign;
@@ -34,7 +59,7 @@ int getint(int *pn)
     *pn *= sign;
     if(c != EOF) ungetch(c);
     return c;
-}
+}*/
 
 int getch(void)
 {
