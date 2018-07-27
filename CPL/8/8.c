@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+#define MAXMALLOC 1048576 //DOn't let it malloc more than 1MB. 
+
 typedef long Align;
 
 union header {
@@ -20,6 +22,12 @@ void *malloc(unsigned nbytes)
     Header *p, *prevp;
     Header *morecore(unsigned);
     unsigned nunits;
+    
+    if(nbytes > MAXMALLOC) {
+        fprintf(stderr, "Cannot malloc %u bytes, max is %d", nbytes, MAXMALLOC);
+        return NULL;
+    }
+        
     
     nunits = (nbytes+sizeof(Header)-1)/sizeof(Header)+1;
     if((prevp = freep) == NULL) { //No free list yet
@@ -102,3 +110,5 @@ void *calloc(int n, int size)
     
     return temp;
 }
+
+void bfree();
