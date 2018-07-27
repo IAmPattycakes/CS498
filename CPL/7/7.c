@@ -1,0 +1,1 @@
+/*What pattern finding program?*/
